@@ -1,4 +1,4 @@
-package test;
+package test.login;
 
 import org.junit.After;
 import org.junit.Before;

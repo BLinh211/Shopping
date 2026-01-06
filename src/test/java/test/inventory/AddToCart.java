@@ -7,7 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.Test;
 import utils.WebElementUtils;
 
-public class InventoryManagement {
+public class AddToCart {
 
     WebDriver driver;
     WebElementUtils elementUtils;
@@ -31,7 +31,7 @@ public class InventoryManagement {
         elementUtils.click("id", "login-button");
     }
     @Test
-    public void InventoryManagement()
+    public void AddToCart()
     {
 
     }

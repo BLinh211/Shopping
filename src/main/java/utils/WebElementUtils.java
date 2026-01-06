@@ -3,35 +3,56 @@ package utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class WebElementUtils {
 
     WebDriver driver;
+    WebDriverWait wait;
 
     public WebElementUtils(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // Trả về By theo locatorType
-    public By getBy(String locatorType, String locatorValue) {
-        switch (locatorType.toLowerCase()) {
+    public By getBy(String type, String value) {
+        switch (type.toLowerCase()) {
             case "id":
-                return By.id(locatorValue);
+                return By.id(value);
             case "name":
-                return By.name(locatorValue);
+                return By.name(value);
             case "xpath":
-                return By.xpath(locatorValue);
+                return By.xpath(value);
             case "css":
-                return By.cssSelector(locatorValue);
-            case "class":
-                return By.className(locatorValue);
+                return By.cssSelector(value);
             default:
-                throw new IllegalArgumentException("Locator type không hợp lệ: " + locatorType);
+                throw new RuntimeException("Locator type not supported: " + type);
         }
     }
 
-    // Trả về WebElement
-    public WebElement getElement(String locatorType, String locatorValue) {
-        return driver.findElement(getBy(locatorType, locatorValue));
+    public WebElement getElement(String type, String value) {
+        return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        getBy(type, value)
+                )
+        );
+    }
+
+    public void sendKeys(String type, String value, String text) {
+        WebElement element = getElement(type, value);
+        element.clear();
+        element.sendKeys(text);
+    }
+
+    public void click(String type, String value) {
+        WebElement element = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        getBy(type, value)
+                )
+        );
+        element.click();
     }
 }
