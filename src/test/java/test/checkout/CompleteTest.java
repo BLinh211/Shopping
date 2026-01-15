@@ -1,12 +1,13 @@
 package test.checkout;
 
 import models.Product;
-import org.junit.Before;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import utils.WaitElement;
@@ -19,7 +20,7 @@ public class CompleteTest {
     WebDriver driver;
     WebElementUtils elementUtils;
     List<Product> products;
-    @Before
+    @BeforeMethod
     public void setup() {
 
 
@@ -43,7 +44,7 @@ public class CompleteTest {
         // Overview
         elementUtils.click("id","checkout");
     }
-    @org.junit.Test
+
     @Test
     public void testClickButtonBackHome(){
         WebElement btnBackHome= WaitElement.clickable(driver, By.id("back-to-products"),10);
@@ -57,7 +58,7 @@ public class CompleteTest {
         int itemCount = driver.findElements(By.className("inventory_item")).size();
         Assert.assertTrue(itemCount > 0, "No products displayed!");
     }
-    @org.junit.Test
+
     @Test
     public void testClickIconYourCart(){
         WebElement iconYourCart = WaitElement.clickable(driver, By.className("shopping_cart_link"),10);

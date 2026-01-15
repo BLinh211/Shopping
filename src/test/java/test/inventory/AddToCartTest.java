@@ -1,7 +1,7 @@
 package test.inventory;
 
 import models.Product;
-import org.junit.Before;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import utils.WaitElement;
@@ -24,7 +25,7 @@ public class AddToCartTest {
     List<Product> products;
 
 
-    @Before
+    @BeforeMethod
     public void setup() {
 
 
@@ -112,7 +113,7 @@ public class AddToCartTest {
 
 
     }
-    @org.junit.Test
+    @Test
     public void testAddToCartNoProducts() {
         List<WebElement> listProduct = WaitElement.visibleElements(driver, By.xpath("//div[@class='inventory_item']"), 10);
         Assert.assertTrue(listProduct.getFirst().isDisplayed(), "No products displayed!");

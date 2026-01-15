@@ -1,13 +1,14 @@
 package test.checkout;
 
 import models.Product;
-import org.junit.Before;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import utils.WaitElement;
@@ -24,7 +25,7 @@ public class YourInfoTest {
     List<Product> products;
 
 
-    @Before
+    @BeforeMethod
     public void setup() {
 
 
@@ -54,7 +55,7 @@ public class YourInfoTest {
                 );
     }
 
-    @org.junit.Test
+
     @Test
     public void testValidCartInformation() {
         List<WebElement> listElementProduct = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
@@ -75,7 +76,7 @@ public class YourInfoTest {
         Assert.assertEquals(totalShoppingCart.getText(), products.size() + "", "❌ The total number off products in the cart is incorrect!");
     }
 
-    @org.junit.Test
+
     @Test
     public void testYourInformationWithValidCredentials() {
         WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
@@ -92,7 +93,7 @@ public class YourInfoTest {
         Assert.assertEquals(titlePage.getText(), "Checkout: Overview", "Unable to switch pages.");
     }
 
-    @org.junit.Test
+
     @Test
     public void testYourInformationWithInvalidLastName() {
         WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
@@ -109,7 +110,7 @@ public class YourInfoTest {
         Assert.assertTrue(errorMsg.getText().contains("Error: Last Name is required"), "Unexpected error message!");
     }
 
-    @org.junit.Test
+
     @Test
     public void testYourInformationWithInvalidFirstName() {
         WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
@@ -125,7 +126,7 @@ public class YourInfoTest {
         Assert.assertTrue(errorMsg.isDisplayed(), "Error message not displayed!");
         Assert.assertTrue(errorMsg.getText().contains("Error: First Name is required"), "Unexpected error message!");
     }
-    @org.junit.Test
+
     @Test
     public void testYourInformationWithInvalidPostalCode() {
         WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
@@ -142,7 +143,6 @@ public class YourInfoTest {
         Assert.assertTrue(errorMsg.getText().contains("Error: Postal Code is required"), "Unexpected error message!");
     }
 
-    @org.junit.Test
     @Test
     public void testClickButtonCancel(){
         WebElement btnCancel = WaitElement.clickable(driver, By.id("cancel"), 10);
@@ -153,7 +153,7 @@ public class YourInfoTest {
         Assert.assertEquals(title.getText(), "Your Cart", "Unable to switch pages.");
     }
 
-    @org.junit.Test
+    @Test
     public void testClickButtonCheckout() {
         WebElement btnCheckout = (WebElement) ExpectedConditions.presenceOfElementLocated(By.id("checkout"));
         Assert.assertTrue(btnCheckout.isDisplayed(), "button checkout not displayed");
