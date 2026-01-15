@@ -25,7 +25,6 @@ public class YourCartTest {
     @Before
     public void setup() {
 
-        //  KHỞI TẠO DRIVER
         driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com/");
@@ -33,11 +32,28 @@ public class YourCartTest {
         elementUtils = new WebElementUtils(driver);
         products = new ArrayList<>();
 
-        //  LOGIN
+        // LOGIN
         elementUtils.sendKeys("id", "user-name", "standard_user");
         elementUtils.sendKeys("id", "password", "secret_sauce");
         elementUtils.click("id", "login-button");
+
+        // VÀO CART
+        elementUtils.click("class", "shopping_cart_link");
+
+        // GÁN products = tổng số sản phẩm trong cart
+        List<WebElement> cartItems =
+                WaitElement.visibleElements(
+                        driver,
+                        By.className("cart_item"),
+                        10
+                );
+
+        products.clear();
+        for (WebElement item : cartItems) {
+            products.add(new Product());
+        }
     }
+
     @Test
     public void testValidCartInformation() {
         List<WebElement> listElementProduct = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);

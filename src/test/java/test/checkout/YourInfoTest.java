@@ -12,6 +12,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import utils.WaitElement;
 import utils.WebElementUtils;
+import utils.ElementValidate;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,13 @@ public class YourInfoTest {
         elementUtils.click("id", "add-to-cart-sauce-labs-backpack");
         // Your info
         elementUtils.click("class", "shopping_cart_link");
+        // GÁN products = tổng số sản phẩm trong cart
+        List<WebElement> cartItems =
+                WaitElement.visibleElements(
+                        driver,
+                        By.className("cart_item"),
+                        10
+                );
     }
 
     @org.junit.Test
@@ -68,49 +77,80 @@ public class YourInfoTest {
 
     @org.junit.Test
     @Test
-    public void testRemoveAllProduct() {
-        int size = products.size();
-        for (int i = 0; i < size; i++) {
-            List<WebElement> listElementProductBeforeRemove = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
-            Assert.assertEquals(listElementProductBeforeRemove.size(), products.size(), "incorrect quantity");
-            WebElement nameProduct = listElementProductBeforeRemove.get(0).findElement(By.xpath("./descendant::div[@class=\"inventory_item_name\"]"));
-            WebElement btnRemove = listElementProductBeforeRemove.get(0).findElement(By.xpath("./descendant::button"));
-            products.removeIf(product -> product.getName().equals(nameProduct.getText()));
-            btnRemove.click();
-        }
-        List<WebElement> cartItems = driver.findElements(By.className("cart_item"));
-        Assert.assertTrue(cartItems.isEmpty(), "incorrect quantity");
-        WebElement totalShoppingCar = WaitElement.visible(driver, By.className("shopping_cart_link"), 10);
-        Assert.assertEquals(totalShoppingCar.getText(), "", "❌ The total number off products in the cart is incorrect!");
+    public void testYourInformationWithValidCredentials() {
+        WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
+        ElementValidate.clearAndType(inputFirstName, "Linh");
+        WebElement inputLastName = WaitElement.visible(driver, By.id("last-name"), 10);
+        ElementValidate.clearAndType(inputLastName, "Bao");
+        WebElement inputPostalCode = WaitElement.visible(driver, By.id("postal-code"), 10);
+        ElementValidate.clearAndType(inputPostalCode, "123456");
+        WebElement btnContinue = WaitElement.clickable(driver, By.id("continue"), 10);
+        Assert.assertTrue(btnContinue.isDisplayed(),"The button continue is not displayed.");
+        btnContinue.click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/checkout-step-two.html", "Unable to switch pages.");
+        WebElement titlePage = WaitElement.visible(driver, By.className("title"), 10);
+        Assert.assertEquals(titlePage.getText(), "Checkout: Overview", "Unable to switch pages.");
     }
 
     @org.junit.Test
     @Test
-    public void testRemoveAProduct() {
-        List<WebElement> listElementProductBeforeRemove = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
-        Assert.assertEquals(listElementProductBeforeRemove.size(), products.size(), "incorrect quantity");
+    public void testYourInformationWithInvalidLastName() {
+        WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
+        ElementValidate.clearAndType(inputFirstName, "Linh");
+        WebElement inputLastName = WaitElement.visible(driver, By.id("last-name"), 10);
+        ElementValidate.clearAndType(inputLastName, "");
+        WebElement inputPostalCode = WaitElement.visible(driver, By.id("postal-code"), 10);
+        ElementValidate.clearAndType(inputPostalCode, "123456");
+        WebElement btnContinue = WaitElement.clickable(driver, By.id("continue"), 10);
+        Assert.assertTrue(btnContinue.isDisplayed(),"The button continue is not displayed.");
+        btnContinue.click();
+        WebElement errorMsg =WaitElement.visible(driver,By.xpath("//h3"),10);
+        Assert.assertTrue(errorMsg.isDisplayed(), "Error message not displayed!");
+        Assert.assertTrue(errorMsg.getText().contains("Error: Last Name is required"), "Unexpected error message!");
+    }
 
-        WebElement nameProduct = listElementProductBeforeRemove.getFirst().findElement(By.xpath("./descendant::div[@class=\"inventory_item_name\"]"));
-        WebElement btnRemove = listElementProductBeforeRemove.getFirst().findElement(By.xpath("./descendant::button"));
-        products.removeIf(product -> product.getName().equals(nameProduct.getText()));
-        btnRemove.click();
+    @org.junit.Test
+    @Test
+    public void testYourInformationWithInvalidFirstName() {
+        WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
+        ElementValidate.clearAndType(inputFirstName, "");
+        WebElement inputLastName = WaitElement.visible(driver, By.id("last-name"), 10);
+        ElementValidate.clearAndType(inputLastName, "Bao");
+        WebElement inputPostalCode = WaitElement.visible(driver, By.id("postal-code"), 10);
+        ElementValidate.clearAndType(inputPostalCode, "123456");
+        WebElement btnContinue = WaitElement.clickable(driver, By.id("continue"), 10);
+        Assert.assertTrue(btnContinue.isDisplayed(),"The button continue is not displayed.");
+        btnContinue.click();
+        WebElement errorMsg =WaitElement.visible(driver,By.xpath("//h3"),10);
+        Assert.assertTrue(errorMsg.isDisplayed(), "Error message not displayed!");
+        Assert.assertTrue(errorMsg.getText().contains("Error: First Name is required"), "Unexpected error message!");
+    }
+    @org.junit.Test
+    @Test
+    public void testYourInformationWithInvalidPostalCode() {
+        WebElement inputFirstName = WaitElement.visible(driver, By.id("first-name"), 10);
+        ElementValidate.clearAndType(inputFirstName, "Linh");
+        WebElement inputLastName = WaitElement.visible(driver, By.id("last-name"), 10);
+        ElementValidate.clearAndType(inputLastName, "Bao");
+        WebElement inputPostalCode = WaitElement.visible(driver, By.id("postal-code"), 10);
+        ElementValidate.clearAndType(inputPostalCode, "");
+        WebElement btnContinue = WaitElement.clickable(driver, By.id("continue"), 10);
+        Assert.assertTrue(btnContinue.isDisplayed(),"The button continue is not displayed.");
+        btnContinue.click();
+        WebElement errorMsg =WaitElement.visible(driver,By.xpath("//h3"),10);
+        Assert.assertTrue(errorMsg.isDisplayed(), "Error message not displayed!");
+        Assert.assertTrue(errorMsg.getText().contains("Error: Postal Code is required"), "Unexpected error message!");
+    }
 
-        List<WebElement> listElementProductAfterRemove = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
-        Assert.assertTrue(listElementProductAfterRemove.getFirst().isDisplayed(), "incorrect quantity");
-        WebElement totalShoppingCar = WaitElement.visible(driver, By.className("shopping_cart_link"), 10);
-        Assert.assertEquals(products.size(), Integer.parseInt(totalShoppingCar.getText()), "❌ The total number off products in the cart is incorrect!");
-        for (int i = 0; i < products.size(); i++) {
-            WebElement nameProductAfterRemove = listElementProductAfterRemove.get(i).findElement(By.xpath("./descendant::div[@class=\"inventory_item_name\"]"));
-            Assert.assertEquals(products.get(i).getName(), nameProductAfterRemove.getText(), "Product name number " + (i + 1) + " is incorrect.");
-            WebElement descProductAfterRemove = listElementProductAfterRemove.get(i).findElement(By.xpath("./descendant::div[@class=\"inventory_item_desc\"]"));
-            Assert.assertEquals(products.get(i).getDesc(), descProductAfterRemove.getText(), "Product desc number " + (i + 1) + " is incorrect.");
-
-            WebElement priceProductAfterRemove = listElementProductAfterRemove.get(i).findElement(By.xpath("./descendant::div[@class=\"inventory_item_price\"]"));
-            Assert.assertEquals("$" + products.get(i).getPrice(), priceProductAfterRemove.getText(), "Product price number " + (i + 1) + " is incorrect.");
-
-            WebElement quantityProductAfterRemove = listElementProductAfterRemove.get(i).findElement(By.xpath("./descendant::div[@class=\"cart_quantity\"]"));
-            Assert.assertEquals("" + products.get(i).getQuantity(), quantityProductAfterRemove.getText(), "Product quantity number " + (i + 1) + " is incorrect.");
-        }
+    @org.junit.Test
+    @Test
+    public void testClickButtonCancel(){
+        WebElement btnCancel = WaitElement.clickable(driver, By.id("cancel"), 10);
+        Assert.assertTrue(btnCancel.isDisplayed(),"The button cancel is not displayed.");
+        btnCancel.click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html", "Unable to switch pages.");
+        WebElement title = WaitElement.visible(driver, By.xpath("//span[@class=\"title\"]"), 10);
+        Assert.assertEquals(title.getText(), "Your Cart", "Unable to switch pages.");
     }
 
     @org.junit.Test

@@ -1,6 +1,13 @@
 package utils;
 
-public class ElementValidation {
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.List;
+
+public class ElementValidate {
+
     public static String validate(
             WebDriver driver,
             WebElement field,
@@ -154,4 +161,5 @@ public class ElementValidation {
             );
         }
     }
+
 }
