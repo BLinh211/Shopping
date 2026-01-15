@@ -47,6 +47,7 @@ public class WebElementUtils {
         element.sendKeys(text);
     }
 
+
     public void click(String type, String value) {
         WebElement element = wait.until(
                 ExpectedConditions.elementToBeClickable(
@@ -55,4 +56,5 @@ public class WebElementUtils {
         );
         element.click();
     }
+
 }

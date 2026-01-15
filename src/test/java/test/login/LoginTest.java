@@ -30,20 +30,20 @@ public class LoginTest {
     @Test
     public void happyCaseLogin() {
 
-        // 1️⃣ Đọc dữ liệu từ Excel
+        // Đọc dữ liệu từ Excel
         List<Map<String, String>> testData =
                 ExcelUtils.readExcel(
                         "src/test/resources/testdata.xlsx",
                         "HappyCase"
                 );
 
-        // 2️⃣ Chạy từng dòng dữ liệu
+        // Chạy từng dòng dữ liệu
         for (Map<String, String> data : testData) {
 
             String username = data.get("username");
             String password = data.get("password");
 
-            // 3️⃣ Thao tác UI qua WebElementUtils
+            // Thao tác UI qua WebElementUtils
             elementUtils.sendKeys("id", "user-name", username);
             elementUtils.sendKeys("id", "password", password);
             elementUtils.click("id", "login-button");
@@ -55,20 +55,20 @@ public class LoginTest {
     @Test
     public void UpperCaseLogin() {
 
-        // 1️⃣ Đọc dữ liệu từ Excel
+        // Đọc dữ liệu từ Excel
         List<Map<String, String>> testData =
                 ExcelUtils.readExcel(
                         "src/test/resources/testdata.xlsx",
                         "UpperCase"
                 );
 
-        // 2️⃣ Chạy từng dòng dữ liệu
+        // Chạy từng dòng dữ liệu
         for (Map<String, String> data : testData) {
 
             String username = data.get("username");
             String password = data.get("password");
 
-            // 3️⃣ Thao tác UI qua WebElementUtils
+            // Thao tác UI qua WebElementUtils
             elementUtils.sendKeys("id", "user-name", username);
             elementUtils.sendKeys("id", "password", password);
             elementUtils.click("id", "login-button");
@@ -80,20 +80,20 @@ public class LoginTest {
     @Test
     public void UnhappyCaseLogin() {
 
-        // 1️⃣ Đọc dữ liệu từ Excel
+        // Đọc dữ liệu từ Excel
         List<Map<String, String>> testData =
                 ExcelUtils.readExcel(
                         "src/test/resources/testdata.xlsx",
                         "UnhappyCase"
                 );
 
-        // 2️⃣ Chạy từng dòng dữ liệu
+        // Chạy từng dòng dữ liệu
         for (Map<String, String> data : testData) {
 
             String username = data.get("username");
             String password = data.get("password");
 
-            // 3️⃣ Thao tác UI qua WebElementUtils
+            // Thao tác UI qua WebElementUtils
             elementUtils.sendKeys("id", "user-name", username);
             elementUtils.sendKeys("id", "password", password);
             elementUtils.click("id", "login-button");
