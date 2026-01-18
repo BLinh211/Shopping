@@ -28,6 +28,9 @@ public class WebElementUtils {
                 return By.xpath(value);
             case "css":
                 return By.cssSelector(value);
+            case "class":
+            case "classname":
+                return By.className(value);
             default:
                 throw new RuntimeException("Locator type not supported: " + type);
         }

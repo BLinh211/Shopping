@@ -12,6 +12,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+import test.action.InventoryPage;
+import test.action.LoginPage;
 import utils.WaitElement;
 import utils.WebElementUtils;
 
@@ -23,6 +25,9 @@ public class YourCartTest {
     WebDriver driver;
     WebElementUtils elementUtils;
     List<Product> products;
+    LoginPage loginPage;
+    InventoryPage inventoryPage;
+
     @BeforeMethod
     public void setup() {
 
@@ -33,13 +38,17 @@ public class YourCartTest {
         elementUtils = new WebElementUtils(driver);
         products = new ArrayList<>();
 
+        inventoryPage = new InventoryPage(driver);
+
         // LOGIN
-        elementUtils.sendKeys("id", "user-name", "standard_user");
-        elementUtils.sendKeys("id", "password", "secret_sauce");
-        elementUtils.click("id", "login-button");
+//        elementUtils.sendKeys("id", "user-name", "standard_user");
+//        elementUtils.sendKeys("id", "password", "secret_sauce");
+//        elementUtils.click("id", "login-button");
+        loginPage.login("standard_user", "secret_sauce");
 
         // VÀO CART
-        elementUtils.click("class", "shopping_cart_link");
+//        elementUtils.click("class", "shopping_cart_link");
+        inventoryPage.moveToCart();
 
         // GÁN products = tổng số sản phẩm trong cart
         List<WebElement> cartItems =
@@ -56,7 +65,7 @@ public class YourCartTest {
     }
 
     @Test
-    public void testValidCartInformation() {
+    public void userValidCartInformation() {
         List<WebElement> listElementProduct = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
         Assert.assertEquals(products.size(), listElementProduct.size(), "incorrect quantity");
         for (int i = 0; i < products.size(); i++) {
@@ -75,7 +84,7 @@ public class YourCartTest {
         Assert.assertEquals(totalShoppingCart.getText(), products.size() + "", "❌ The total number off products in the cart is incorrect!");
     }
     @Test
-    public void testRemoveAllProduct() {
+    public void userRemoveAllProduct() {
         int size=products.size();
         for (int i = 0; i < size; i++) {
             List<WebElement> listElementProductBeforeRemove = WaitElement.visibleElements(driver, By.xpath("//div[@class=\"cart_item\"]"), 10);
@@ -100,7 +109,7 @@ public class YourCartTest {
     }
     @Test
 
-    public void testClickButtonCheckOut() {
+    public void userClickButtonCheckOut() {
         WebElement btnCheckOut = WaitElement.clickable(driver, By.id("checkout"), 15);
         Assert.assertTrue(btnCheckOut.isDisplayed(), "button checkout haven't been displayed");
 

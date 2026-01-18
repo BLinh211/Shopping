@@ -1,4 +1,4 @@
-package test.login;
+package test.feature;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import test.action.LoginPage;
 import utils.ExcelUtils;
 import utils.WebElementUtils;
 
@@ -16,42 +17,40 @@ public class LoginTest {
 
     WebDriver driver;
     WebElementUtils elementUtils;
+    LoginPage loginPage;
+
 
     @BeforeMethod
     public void setup() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com/");
-
+        loginPage = new LoginPage(driver);
 
         elementUtils = new WebElementUtils(driver);
     }
 
+
     @Test
     public void happyCaseLogin() {
 
-        // Đọc dữ liệu từ Excel
         List<Map<String, String>> testData =
                 ExcelUtils.readExcel(
                         "src/test/resources/testdata.xlsx",
                         "HappyCase"
                 );
 
-        // Chạy từng dòng dữ liệu
         for (Map<String, String> data : testData) {
 
             String username = data.get("username");
             String password = data.get("password");
 
-            // Thao tác UI qua WebElementUtils
-            elementUtils.sendKeys("id", "user-name", username);
-            elementUtils.sendKeys("id", "password", password);
-            elementUtils.click("id", "login-button");
+            loginPage.login(username, password);
 
-            // reset lại form cho case tiếp theo
             driver.navigate().refresh();
         }
     }
+
     @Test
     public void UpperCaseLogin() {
 
@@ -69,9 +68,9 @@ public class LoginTest {
             String password = data.get("password");
 
             // Thao tác UI qua WebElementUtils
-            elementUtils.sendKeys("id", "user-name", username);
-            elementUtils.sendKeys("id", "password", password);
-            elementUtils.click("id", "login-button");
+            loginPage.enterUsername(data.get("username"));
+            loginPage.enterPassword(data.get("password"));
+            loginPage.clickLoginButton();
 
             // reset lại form cho case tiếp theo
             driver.navigate().refresh();
@@ -94,9 +93,9 @@ public class LoginTest {
             String password = data.get("password");
 
             // Thao tác UI qua WebElementUtils
-            elementUtils.sendKeys("id", "user-name", username);
-            elementUtils.sendKeys("id", "password", password);
-            elementUtils.click("id", "login-button");
+            loginPage.enterUsername(data.get("username"));
+            loginPage.enterPassword(data.get("password"));
+            loginPage.clickLoginButton();
 
             // reset lại form cho case tiếp theo
             driver.navigate().refresh();
